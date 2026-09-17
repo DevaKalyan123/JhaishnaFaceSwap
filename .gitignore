@@ -1,0 +1,42 @@
+# Android Studio
+.idea/
+*.iml
+
+# Kotlin
+.kotlin/
+
+# Gradle
+.gradle/
+**/build/
+
+# Local configuration
+local.properties
+
+# APK / AAB
+*.apk
+*.aab
+
+# Logs / crash files
+*.log
+hs_err_pid*
+replay_pid*
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# Firebase service account / secrets
+service-account*.json
+firebase-service-account*.json
+*-service-account*.json
+
+# Firebase service account key
+fcm-server/serviceAccountKey.json
+
+# OS files
+.DS_Store
+Thumbs.db

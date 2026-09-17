@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "495405298079",
+    "project_id": "jhaishnafaceswap",
+    "storage_bucket": "jhaishnafaceswap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495405298079:android:d3b5857c22954807bb8daa",
+        "android_client_info": {
+          "package_name": "com.faceswap.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495405298079-futdui46kd88l8c3k7p1vsim6o6cmbf2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.faceswap.myapplication",
+            "certificate_hash": "4b81b2cc4c5fbc8570be261fc0cbbb6fa2a20e2c"
+          }
+        },
+        {
+          "client_id": "495405298079-o6casm2aip0857009a63l1o1jm5if050.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvzCtInNRgwH8srX36bKVKJ0OmDN8eF3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495405298079-o6casm2aip0857009a63l1o1jm5if050.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
