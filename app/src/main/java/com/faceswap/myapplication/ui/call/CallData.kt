@@ -5,6 +5,7 @@ data class CallData(
     val callerName: String = "",
     val receiverId: String = "",
     val channelName: String = "",
-    val status: String = "", // calling / accepted / rejected
-    val timestamp: Long = 0
+    val faceUrl: String = "",
+    val status: String = "",
+    val timestamp: Long = 0L
 )

@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
+
     implementation(libs.identity.jvm)
     implementation(libs.androidx.datastore.core)
 
@@ -47,32 +48,41 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
-    // 🔥 Firebase BOM
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-
-    // Firebase Auth + Firestore
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-messaging")
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.0.0")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation("io.agora.rtc:full-sdk:4.2.2")
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
-    implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("org.json:json:20240303")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("org.json:json:20240303")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
 
+    // Compose icons
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // Image loading
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // Agora
+    implementation("io.agora.rtc:full-sdk:4.2.2")
+
+    // HTTP - Cloudinary upload
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // JSON response parsing
+    implementation("org.json:json:20240303")
+
+    // Activity Compose
+    implementation("androidx.activity:activity-compose:1.8.2")
+    //ONNX Runtime
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.20.0")
+
+    // MediaPipe Face Landmarker
+    implementation("com.google.mediapipe:tasks-vision:0.10.21")
 }

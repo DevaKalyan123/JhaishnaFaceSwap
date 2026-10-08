@@ -15,59 +15,102 @@ fun IncomingCallScreen(
     navController: NavHostController
 ) {
 
-    var callData by remember { mutableStateOf(CallData()) }
+    var callData by remember {
+        mutableStateOf(CallData())
+    }
 
-    LaunchedEffect(Unit) {
-        FirebaseFirestore.getInstance()
+    LaunchedEffect(callId) {
+
+        FirebaseFirestore
+            .getInstance()
             .collection("calls")
             .document(callId)
             .get()
             .addOnSuccessListener {
-                callData = it.toObject(CallData::class.java) ?: CallData()
+
+                callData =
+                    it.toObject(
+                        CallData::class.java
+                    ) ?: CallData()
             }
     }
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment =
+            Alignment.CenterHorizontally,
+        verticalArrangement =
+            Arrangement.Center
     ) {
 
-        Text("${callData.callerName} is calling...")
+        Text(
+            "${callData.callerName} is calling..."
+        )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+        // =====================================================
+        // ACCEPT
+        // =====================================================
 
         Button(
             onClick = {
-                FirebaseFirestore.getInstance()
+
+                FirebaseFirestore
+                    .getInstance()
                     .collection("calls")
                     .document(callId)
-                    .update("status", "accepted")
+                    .update(
+                        "status",
+                        "accepted"
+                    )
 
                 navController.navigate(
-                    "video_call/${callData.channelName}/dummy/$callId"
-                )
-            }
-        ) {
-            Text("Accept")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
-            onClick = {
-                FirebaseFirestore.getInstance()
-                    .collection("calls")
-                    .document(callId)
-                    .update("status", "rejected")
-
-                navController.navigate("home") {
-                    popUpTo("home") { inclusive = false }
+                    "video_call/$callId"
+                ) {
+                    popUpTo(
+                        "incoming_call/$callId"
+                    ) {
+                        inclusive = true
+                    }
                 }
             }
         ) {
-            Text("Reject")
 
+            Text("Accept")
+        }
+
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+        // =====================================================
+        // REJECT
+        // =====================================================
+
+        Button(
+            onClick = {
+
+                FirebaseFirestore
+                    .getInstance()
+                    .collection("calls")
+                    .document(callId)
+                    .update(
+                        "status",
+                        "rejected"
+                    )
+
+                navController.navigate("home") {
+                    popUpTo("home") {
+                        inclusive = false
+                    }
+                }
+            }
+        ) {
+
+            Text("Reject")
         }
     }
 }

@@ -14,27 +14,49 @@ fun OutgoingCallScreen(
     callId: String,
     navController: NavHostController
 ) {
-    var status by remember { mutableStateOf("Calling...") }
 
-    LaunchedEffect(Unit) {
-        FirebaseFirestore.getInstance()
+    var status by remember {
+        mutableStateOf("Calling...")
+    }
+
+    LaunchedEffect(callId) {
+
+        FirebaseFirestore
+            .getInstance()
             .collection("calls")
             .document(callId)
             .addSnapshotListener { value, _ ->
 
-                val call = value?.toObject(CallData::class.java)
+                val call =
+                    value?.toObject(
+                        CallData::class.java
+                    )
 
                 when (call?.status) {
 
                     "accepted" -> {
+
+                        status = "Connected"
+
                         navController.navigate(
-                            "video_call/${call.channelName}/dummy/$callId"
-                        )
+                            "video_call/${callId}"
+                        ) {
+                            popUpTo(
+                                "outgoing_call/$callId"
+                            ) {
+                                inclusive = true
+                            }
+                        }
                     }
 
                     "rejected" -> {
+
+                        status = "Call rejected"
+
                         navController.navigate("home") {
-                            popUpTo("home") { inclusive = false }
+                            popUpTo("home") {
+                                inclusive = false
+                            }
                         }
                     }
                 }
@@ -43,25 +65,38 @@ fun OutgoingCallScreen(
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment =
+            Alignment.CenterHorizontally,
+        verticalArrangement =
+            Arrangement.Center
     ) {
+
         Text(status)
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
 
         Button(
             onClick = {
-                FirebaseFirestore.getInstance()
+
+                FirebaseFirestore
+                    .getInstance()
                     .collection("calls")
                     .document(callId)
-                    .update("status", "rejected")
+                    .update(
+                        "status",
+                        "rejected"
+                    )
 
                 navController.navigate("home") {
-                    popUpTo("home") { inclusive = false }
+                    popUpTo("home") {
+                        inclusive = false
+                    }
                 }
             }
         ) {
+
             Text("Cancel")
         }
     }
