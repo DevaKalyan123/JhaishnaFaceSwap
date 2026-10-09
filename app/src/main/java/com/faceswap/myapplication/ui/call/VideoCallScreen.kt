@@ -262,6 +262,11 @@ fun VideoCallScreen(
         )
     }
 
+    // Remote UID is state-driven so renderer setup is retried after engine creation.
+    var remoteUid by remember {
+        mutableIntStateOf(0)
+    }
+
     // =========================================================
     // VIDEO VIEWS
     // =========================================================
@@ -1194,52 +1199,11 @@ fun VideoCallScreen(
                     uid: Int,
                     elapsed: Int
                 ) {
-
                     Log.d(
                         "AGORA",
-                        "REMOTE USER JOINED: $uid"
+                        "REMOTE USER JOINED: uid=$uid"
                     )
-
-                    val currentEngine =
-                        engine
-
-                    if (
-                        currentEngine != null
-                    ) {
-
-                        try {
-
-                            remoteView.layoutParams =
-                                FrameLayout.LayoutParams(
-                                    FrameLayout.LayoutParams.MATCH_PARENT,
-                                    FrameLayout.LayoutParams.MATCH_PARENT
-                                )
-
-                            currentEngine.setupRemoteVideo(
-
-                                VideoCanvas(
-                                    remoteView,
-                                    VideoCanvas.RENDER_MODE_HIDDEN,
-                                    uid
-                                )
-                            )
-
-                            Log.d(
-                                "AGORA",
-                                "REMOTE VIDEO ATTACHED: uid=$uid"
-                            )
-
-                        } catch (
-                            e: Exception
-                        ) {
-
-                            Log.e(
-                                "AGORA",
-                                "Remote video setup failed",
-                                e
-                            )
-                        }
-                    }
+                    remoteUid = uid
                 }
 
                 override fun onFirstRemoteVideoDecoded(
@@ -1248,57 +1212,12 @@ fun VideoCallScreen(
                     height: Int,
                     elapsed: Int
                 ) {
-
                     Log.d(
                         "AGORA",
-                        "FIRST REMOTE VIDEO: uid=$uid ${width}x$height"
+                        "FIRST REMOTE FRAME: uid=$uid, ${width}x$height"
                     )
-
-                    val currentEngine =
-                        engine
-
-                    if (
-                        currentEngine != null
-                    ) {
-
-                        try {
-
-                            remoteView.layoutParams =
-                                FrameLayout.LayoutParams(
-                                    FrameLayout.LayoutParams.MATCH_PARENT,
-                                    FrameLayout.LayoutParams.MATCH_PARENT
-                                )
-
-                            currentEngine.setupRemoteVideo(
-
-                                VideoCanvas(
-                                    remoteView,
-                                    VideoCanvas.RENDER_MODE_HIDDEN,
-                                    uid
-                                )
-                            )
-
-                            Log.d(
-                                "AGORA",
-                                "FIRST REMOTE VIDEO ATTACHED"
-                            )
-
-                        } catch (
-                            e: Exception
-                        ) {
-
-                            Log.e(
-                                "AGORA",
-                                "First remote video setup failed",
-                                e
-                            )
-                        }
-                    }
+                    remoteUid = uid
                 }
-
-                // =============================================
-                // REMOTE USER LEAVE
-                // =============================================
 
                 override fun onUserOffline(
                     uid: Int,
@@ -1314,9 +1233,55 @@ fun VideoCallScreen(
                         "AGORA",
                         "Reason = $reason"
                     )
+                    if (remoteUid == uid) {
+                        remoteUid = 0
+                    }
                 }
             }
         }
+
+    // =========================================================
+    // REMOTE VIDEO RENDERER
+    // =========================================================
+
+    LaunchedEffect(
+        engine,
+        remoteUid
+    ) {
+        val currentEngine = engine
+        val uid = remoteUid
+
+        if (currentEngine != null && uid != 0) {
+            remoteView.post {
+                try {
+                    remoteView.layoutParams =
+                        FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.MATCH_PARENT
+                        )
+
+                    val result = currentEngine.setupRemoteVideo(
+                        VideoCanvas(
+                            remoteView,
+                            VideoCanvas.RENDER_MODE_HIDDEN,
+                            uid
+                        )
+                    )
+
+                    Log.d(
+                        "AGORA",
+                        "REMOTE RENDER SETUP: uid=$uid, result=$result"
+                    )
+                } catch (e: Exception) {
+                    Log.e(
+                        "AGORA",
+                        "REMOTE RENDER SETUP FAILED: uid=$uid",
+                        e
+                    )
+                }
+            }
+        }
+    }
 
     // =========================================================
     // AGORA SETUP
